@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:padding="@dimen/widget_margin">
+
+    <Button
+        android:id="@+id/ONOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:elevation="0dp"
+        android:text="OFF" />
+
+
+    <Button
+        android:id="@+id/incr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:layout_alignBaseline="@+id/ONOFF"
+        android:layout_alignBottom="@+id/ONOFF"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/decr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:layout_alignBaseline="@+id/incr"
+        android:layout_alignBottom="@+id/incr"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ONOFF"
+        android:text="Next Alarm: "
+        android:textColor="@color/colorAccent" />
+
+</RelativeLayout>
