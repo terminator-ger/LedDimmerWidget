@@ -3,6 +3,8 @@
     package="lechnersoft.leddimmerwidget">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +16,7 @@
         <receiver android:name=".DimmerWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
             </intent-filter>
 
             <meta-data
@@ -21,14 +24,6 @@
                 android:resource="@xml/dimmer_widget_info" />
         </receiver>
 
-        <receiver
-            android:name=".AlarmPollingReceiver"
-            android:process=":remote" >
-        </receiver>
-
-        <service
-            android:name=".AlarmPolling"
-            android:exported="false" />
     </application>
 
 </manifest>
