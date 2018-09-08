@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -29,13 +30,14 @@ import static android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED;
 public class DimmerWidget extends AppWidgetProvider {
 
     private static String destinationAdress = "http://192.168.1.20/";
-
+    //public static final String ALARM_SNOOZE_ACTION = "com.android.deskclock.ALARM_SNOOZE";
+    //public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
     private static final String ONOFFBUTTON = "toggleONOFF";
     private static final String INCRBUTTON = "incr";
     private static final String DECRBUTTON = "decr";
     private static final String SUNRISEBUTTON = "sunrise";
-    private static String NEXTAlARM = "";
-    private static String SETALARM = "";
+    private static long NEXTAlARM = 0;
+    private static long SETALARM = 0;
 
 
     @Override
@@ -50,7 +52,11 @@ public class DimmerWidget extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.sunrise, getPendingSelfIntent(context, SUNRISEBUTTON));
 
         Log.i("Update Widget View", "New Update Time : " + NEXTAlARM);
-        remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + NEXTAlARM);
+        long dv = Long.valueOf(NEXTAlARM);// its need to be in milisecond
+        Date df = new java.util.Date(dv);
+        String vv = new SimpleDateFormat("EEEE hh:mm").format(df);
+        Log.i("updateNextAlarmTime", "New Update Time : " + vv);
+        remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + vv);
 
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 
@@ -71,33 +77,25 @@ public class DimmerWidget extends AppWidgetProvider {
 
 
     public void onReceive(Context context, Intent intent) {
-
+    try {
         RESTWakeupInterface apiClient = LEDDimmerAPIClient.getClient(destinationAdress).create(RESTWakeupInterface.class);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.dimmer_widget);
-        remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + NEXTAlARM);
+
 
         super.onReceive(context, intent);
 
-        if (ONOFFBUTTON.equals(intent.getAction())){
-            if(state.instance().ON) {
-                remoteViews.setTextViewText(R.id.ONOFF, "ON");
-                send(apiClient.RestLightOn());
-            }else{
-                remoteViews.setTextViewText(R.id.ONOFF, "OFF");
-                send(apiClient.RestLightOff());
-            }
-            state.instance().ON = !state.instance().ON;
+        if (ONOFFBUTTON.equals(intent.getAction())) {
+            send(apiClient.RestLightToggle());
         }
 
-        if (INCRBUTTON.equals(intent.getAction())){
+        if (INCRBUTTON.equals(intent.getAction())) {
             send(apiClient.RestLightIncr());
         }
 
-        if (DECRBUTTON.equals(intent.getAction())){
+        if (DECRBUTTON.equals(intent.getAction())) {
             send(apiClient.RestLightDecr());
         }
 
-        if (SUNRISEBUTTON.equals(intent.getAction())){
+        if (SUNRISEBUTTON.equals(intent.getAction())) {
             send(apiClient.RestSunrise());
             Handler handler = new Handler();
             final Intent myIntent = intent;
@@ -110,23 +108,54 @@ public class DimmerWidget extends AppWidgetProvider {
             }, 5000);
         }
 
-        if (intent.getAction().equals(ACTION_NEXT_ALARM_CLOCK_CHANGED)){
-            if(NEXTAlARM == "" || NEXTAlARM != SETALARM) {
-                AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                AlarmManager.AlarmClockInfo alinfo = alarm.getNextAlarmClock();
-                long time = alinfo.getTriggerTime();
+        if (intent.getAction().equals(ACTION_NEXT_ALARM_CLOCK_CHANGED)) {
+            AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            AlarmManager.AlarmClockInfo alinfo = alarm.getNextAlarmClock();
+            long time = alinfo.getTriggerTime();
 
-                Date d = new Date(time);
-                String alarmtime = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(d);
-                if(!alarmtime.equals(NEXTAlARM)) {
-                    Log.i("updateNextAlarmTime", "New Update Time : " + NEXTAlARM);
-                    NEXTAlARM = alarmtime;
-                    Call<ResponseBody> resp = apiClient.RestWakeUp(new PostWake(NEXTAlARM));
-                    send(resp);
+            // Date d = new Date(time);
+            // String alarmtime = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(d);
+
+
+            // alarm need to be either empty.. new widged or something different than we have allready set
+            if (NEXTAlARM == 0 && SETALARM == 0) {
+                Log.i("updateNextAlarmTime", "New Update Time : " + time);
+                NEXTAlARM = time;
+                Call<ResponseBody> resp = apiClient.RestWakeUp(new PostWake(String.valueOf(time)));
+                send(resp);
+
+                RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.dimmer_widget);
+                long dv = Long.valueOf(NEXTAlARM);// its need to be in milisecond
+                Date df = new java.util.Date(dv);
+                String vv = new SimpleDateFormat("EEEE hh:mm").format(df);
+                Log.i("updateNextAlarmTime", "New Update Time : " + vv);
+                remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + vv);
+
+            } else if (time != SETALARM) {
+                if (Math.abs(time - SETALARM) >= 900) {
+                    // ofc disable for already set times-> just update when different
+                    if (time != NEXTAlARM) {
+                        NEXTAlARM = time;
+                        Log.i("updateNextAlarmTime", "New Update Time : " + NEXTAlARM);
+                        Call<ResponseBody> resp = apiClient.RestWakeUp(new PostWake(String.valueOf(NEXTAlARM)));
+                        send(resp);
+
+                        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.dimmer_widget);
+                        long dv = Long.valueOf(NEXTAlARM);// its need to be in milisecond
+                        Date df = new java.util.Date(dv);
+                        String vv = new SimpleDateFormat("EEEE hh:mm").format(df);
+                        Log.i("updateNextAlarmTime", "New Update Time : " + vv);
+                        remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + vv);
+
+                    }
                 }
             }
             pushUIUpdate(intent, context);
         }
+    }
+    catch(Exception e){
+
+    }
 
     }
 
@@ -155,10 +184,18 @@ public class DimmerWidget extends AppWidgetProvider {
                     msg = response.body().string();
                     String header = response.message().toString();
                     if(header.contains("WAKEUP_OK")){
-                        SETALARM = msg;
+                        try {
+                            SETALARM = Long.parseLong(msg);
+                        }catch (Exception e){
+
+                        }
                     }
                     if(header.contains("SUNRISE_OK")){
-                        SETALARM = msg;
+                        try {
+                            SETALARM = Long.parseLong(msg);
+                        }catch (Exception e){
+
+                        }
                     }
                 }catch(IOException e){
                     e.printStackTrace();
@@ -171,6 +208,15 @@ public class DimmerWidget extends AppWidgetProvider {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 Log.i("Send:","sending failure");
+            }
+            private long convertTimestamp(String t){
+                Date d = null;
+                try {
+                    d = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").parse(t);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return d.getTime();
             }
 
         });

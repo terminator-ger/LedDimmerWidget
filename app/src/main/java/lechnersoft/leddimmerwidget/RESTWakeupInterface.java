@@ -12,11 +12,8 @@ public interface RESTWakeupInterface {
     @PUT("wakeuptime")
     Call<ResponseBody> RestWakeUp(@Body PostWake postWake);
 
-    @PUT("on")
-    Call<ResponseBody> RestLightOn();
-
-    @PUT("off")
-    Call<ResponseBody> RestLightOff();
+    @PUT("toggle")
+    Call<ResponseBody> RestLightToggle();
 
     @PUT("incr")
     Call<ResponseBody> RestLightIncr();

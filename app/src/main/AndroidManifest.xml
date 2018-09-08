@@ -17,6 +17,7 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+                <!--<action android:name="com.android.deskclock.ALARM_SNOOZE" />-->
             </intent-filter>
 
             <meta-data

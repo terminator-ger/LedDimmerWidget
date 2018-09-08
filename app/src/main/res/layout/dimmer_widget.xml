@@ -1,53 +1,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
     android:padding="@dimen/widget_margin">
 
-    <Button
-        android:id="@+id/ONOFF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:elevation="0dp"
-        android:text="OFF" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/incr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:layout_alignBaseline="@+id/ONOFF"
-        android:layout_alignBottom="@+id/ONOFF"
-        android:layout_toEndOf="@+id/ONOFF" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ONOFF"
+            android:text="Next Alarm: "
+            android:textColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/decr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        android:layout_above="@+id/textView"
-        android:layout_toEndOf="@+id/incr" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/ONOFF"
-        android:text="Next Alarm: "
-        android:textColor="@color/colorAccent" />
+            <Button
+                android:id="@+id/ONOFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@mipmap/icn_on_off" />
 
-    <Button
-        android:id="@+id/sunrise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sunrise"
-        android:layout_above="@+id/textView"
-        android:layout_toEndOf="@+id/decr"
-        android:layout_alignTop="@+id/decr" />
+            <Button
+                android:id="@+id/incr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/decr"
+                android:layout_toStartOf="@+id/decr"
+                android:layout_weight="1"
+                android:background="@mipmap/icn_brighter" />
+
+            <Button
+                android:id="@+id/decr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sunrise"
+                android:layout_toStartOf="@+id/sunrise"
+                android:layout_weight="1"
+                android:background="@mipmap/icn_darker"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/textView"
+                android:layout_weight="1"
+                android:background="@mipmap/icn_sunrise" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
