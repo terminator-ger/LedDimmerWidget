@@ -29,9 +29,8 @@ import static android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED;
 
 public class DimmerWidget extends AppWidgetProvider {
 
+
     private static String destinationAdress = "http://192.168.1.20/";
-    //public static final String ALARM_SNOOZE_ACTION = "com.android.deskclock.ALARM_SNOOZE";
-    //public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
     private static final String ONOFFBUTTON = "toggleONOFF";
     private static final String INCRBUTTON = "incr";
     private static final String DECRBUTTON = "decr";
@@ -59,9 +58,6 @@ public class DimmerWidget extends AppWidgetProvider {
         remoteViews.setTextViewText(R.id.textView, "Next Alarm: " + vv);
 
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
-
-        // Register Callback
-//        scheduleAlarmPolling(context);
 
     }
 
@@ -111,13 +107,7 @@ public class DimmerWidget extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_NEXT_ALARM_CLOCK_CHANGED)) {
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             AlarmManager.AlarmClockInfo alinfo = alarm.getNextAlarmClock();
-           //String nextAlarm = Settings.System.getString(getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
-            //long time = Long.parseLong(nextAlarm);
             long time = alinfo.getTriggerTime();
-
-            // Date d = new Date(time);
-            // String alarmtime = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z").format(d);
-
 
             // alarm need to be either empty.. new widged or something different than we have allready set
             if (NEXTAlARM == 0 && SETALARM == 0) {
