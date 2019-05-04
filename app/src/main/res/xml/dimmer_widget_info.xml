@@ -6,4 +6,5 @@
     android:minWidth="250dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:updatePeriodMillis="86400000"
+    android:configure="lechnersoft.leddimmerwidget.configuration"
     android:widgetCategory="home_screen"></appwidget-provider>

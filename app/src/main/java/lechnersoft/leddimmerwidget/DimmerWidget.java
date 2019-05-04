@@ -111,6 +111,8 @@ public class DimmerWidget extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_NEXT_ALARM_CLOCK_CHANGED)) {
             AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             AlarmManager.AlarmClockInfo alinfo = alarm.getNextAlarmClock();
+           //String nextAlarm = Settings.System.getString(getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
+            //long time = Long.parseLong(nextAlarm);
             long time = alinfo.getTriggerTime();
 
             // Date d = new Date(time);

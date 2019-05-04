@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="pref_enable_light"
+        android:title="@string/pref_enable" />
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/pref_intensity_gradient_types"
+        android:entryValues="@array/pref_intensity_gradient_values"
+        android:key="pref_intensity"
+        android:title="@string/pref_select_intensity_gradient_text" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_start_at_default"
+        android:inputType="textCapWords"
+        android:key="pref_time"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_start_at_text" />
+
+</PreferenceScreen>

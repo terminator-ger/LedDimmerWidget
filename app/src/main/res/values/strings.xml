@@ -1,5 +1,45 @@
 <resources>
-    <string name="app_name">LedDimmerWidget</string>
+    <string name="app_name">SunRiser</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_configuration">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_network">Communication</string>
+    <string name="pref_header_light">Light</string>
+
+    <string name="pref_enable_wifi">Enable WiFi</string>
+    <string name="pref_description_wifi">Control your SunRiser via your Home WiFi
+    </string>
+
+    <string name="pref_network_name">Network SSID</string>
+    <string name="pref_network_ssid">My Home Network</string>
+
+    <string name="pref_network_enter_password">Enter Password</string>
+    <string name="pref_network_password"></string>
+
+    <string name="pref_enable">Wakeup with light</string>
+
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="pref_start_at_default">30</string>
+    <string name="pref_start_at_text">Minutes to start before alarm?</string>
+
+    <string name="pref_select_intensity_gradient_text">Light gradient type</string>
+    <string-array name="pref_intensity_gradient_types">
+        <item>Linear</item>
+        <item>Quadratic</item>
+        <item>Exp</item>
+        <item>Custom</item>
+    </string-array>
+    <string-array name="pref_intensity_gradient_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
 </resources>
